@@ -14,7 +14,7 @@ end
 function playerCollide(x, y)
   for i, v in ipairs(map) do
     for i2 = 1, #map[i] do
-      if map[i][i2] ~= 0 and collision(x, y, 10, 10, (i2-1)*32, (i-1)*32, 32, 32) then
+      if tileType[map[i][i2]] == 1 and collision(x, y, 8, 8, (i2-1)*32, (i-1)*32, 32, 32) then
         return true
       end
     end
