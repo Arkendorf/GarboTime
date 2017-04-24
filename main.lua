@@ -101,12 +101,17 @@ function love.draw()
       end
     end
   end
-  love.graphics.rectangle("fill", player.x, player.y, 8, 8)
+  -- draw player
+    love.graphics.setColor(0, 255, 255)
+    love.graphics.rectangle("fill", player.x, player.y, 8, 8)
+
 
   -- draw enemies
   for i, v in ipairs(enemies) do
+    love.graphics.setColor(255, 0, 0)
     love.graphics.rectangle("fill", v.x, v.y, 8, 8)
   end
+  love.graphics.setColor(255, 255, 255)
 
   -- path test
   for i, v in ipairs(enemies) do
