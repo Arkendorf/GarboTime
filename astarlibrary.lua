@@ -69,10 +69,10 @@ end
 
 function checkSquare(x, y, g, parent, final)
   -- check if square exists
-  if x > 0 and x <= #map[1] and y > 0 and y <= #map then
+  if x > 0 and x <= #nodes[1] and y > 0 and y <= #nodes then
 
     -- adjusts closed and open lists with new square
-    if map[y][x] == walkable and closed({x, y}) == false then
+    if nodes[y][x] == walkable and closed({x, y}) == false then
       result, position = opened({x, y})
       if result == false then
         open[#open + 1] = {x, y, g, g + getH({x, y}, final), parent}
@@ -109,5 +109,5 @@ function setWalkable(num)
 end
 
 function setMap(table)
-  map = table
+  nodes = table
 end
