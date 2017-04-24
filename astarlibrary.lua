@@ -105,7 +105,7 @@ function closed(square)
 end
 
 function setWalkable(num)
-  walkable = 1
+  walkable = num
 end
 
 function setMap(table)
