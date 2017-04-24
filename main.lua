@@ -4,25 +4,33 @@ require("collision")
 function love.load()
   love.graphics.setBackgroundColor(128,128,128)
   player = {}
-  player.x = 0
+  player.x = 32
   player.y = 0
   player.xV = 0
   player.yV = 0
   w, h = love.graphics.getDimensions()
   camera = {x = 0, y = 0}
-  map = {{0, 0, 0, 0, 0, 0, 1},
-        {1, 0, 0, 0, 0, 0, 1},
-        {1, 0, 0, 0, 0, 0, 1},
-        {1, 0, 0, 0, 0, 0, 1},
-        {1, 0, 0, 0, 0, 0, 1}}
+  map = {{1, 2, 2, 0, 2, 2, 1},
+        {1, 2, 2, 0, 2, 2, 1},
+        {1, 2, 2, 0, 2, 2, 1},
+        {1, 2, 2, 0, 2, 2, 1},
+        {1, 2, 2, 0, 2, 2, 1}}
+
+  tileType = {0, 1, 0}
   enemies_load()
 
   tilesetImage = love.graphics.newImage("tileset.png")
   tilesetImage:setFilter("nearest", "linear")
   tileSize = 32
 
-  -- street
-  steet = love.graphics.newQuad(8*tileSize, 11*tileSize, tileSize, tileSize,
+  -- street Yellow
+  street1 = love.graphics.newQuad(1*tileSize, 18*tileSize, tileSize, tileSize,
+  tilesetImage:getWidth(), tilesetImage:getHeight())
+  --street
+  street2 = love.graphics.newQuad(4*tileSize, 18*tileSize, tileSize, tileSize,
+  tilesetImage:getWidth(), tilesetImage:getHeight())
+  -- Brick
+  Brick = love.graphics.newQuad(0*tileSize, 19*tileSize, tileSize, tileSize,
   tilesetImage:getWidth(), tilesetImage:getHeight())
 end
 
@@ -81,16 +89,19 @@ end
 
 function love.draw()
   love.graphics.translate(-camera.x + w/ 2, -camera.y + h / 2)
-  love.graphics.rectangle("fill", player.x, player.y, 8, 8)
   for i, v in ipairs(map) do
     for i2 = 1, #v do
       if map[i][i2] == 1 then
-        love.graphics.rectangle("fill", (i2 - 1) * tileSize, (i - 1) * tileSize, tileSize, tileSize)
+          love.graphics.draw(tilesetImage, Brick,(i2 - 1)*tileSize, (i - 1)*tileSize)
       elseif map[i][i2] == 0 then
-        love.graphics.draw(tilesetImage, steet,(i2 - 1)*tileSize, (i - 1)*tileSize)
+        love.graphics.draw(tilesetImage, street1,(i2 - 1)*tileSize, (i - 1)*tileSize)
+      elseif map[i][i2] == 2 then
+        love.graphics.draw(tilesetImage, street2,(i2 - 1)*tileSize, (i - 1)*tileSize)
+
       end
     end
   end
+  love.graphics.rectangle("fill", player.x, player.y, 10, 10)
 
   -- draw enemies
   for i, v in ipairs(enemies) do
