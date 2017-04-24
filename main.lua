@@ -16,7 +16,7 @@ function love.load()
         {1, 2, 2, 0, 2, 2, 1},
         {1, 2, 2, 0, 2, 2, 1}}
 
-  tileType = {0, 1, 0}
+  tileType = {[0] = 0, [1] = 1, [2] = 0}
   enemies_load()
 
   tilesetImage = love.graphics.newImage("tileset.png")
@@ -101,7 +101,7 @@ function love.draw()
       end
     end
   end
-  love.graphics.rectangle("fill", player.x, player.y, 10, 10)
+  love.graphics.rectangle("fill", player.x, player.y, 8, 8)
 
   -- draw enemies
   for i, v in ipairs(enemies) do
