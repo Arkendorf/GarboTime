@@ -1,5 +1,6 @@
 require("collision")
 function love.load()
+  love.graphics.setBackgroundColor(128,128,128)
   player = {}
   player.x = 0
   player.y = 0
@@ -7,11 +8,19 @@ function love.load()
   player.yV = 0
   w, h = love.graphics.getDimensions()
   camera = {x = 0, y = 0}
-  map = {{0, 0, 0, 0, 0, 1},
-        {1, 0, 0, 0, 0, 1},
-        {1, 0, 0, 0, 0, 1},
-        {1, 0, 0, 0, 0, 1},
-        {1, 0, 0, 0, 0, 1}}
+  map = {{0, 0, 0, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 0, 1}}
+
+  tilesetImage = love.graphics.newImage("tileset.png")
+  tilesetImage:setFilter("nearest", "linear")
+  tileSize = 32
+
+  -- street
+  steet = love.graphics.newQuad(8*tileSize, 11*tileSize, tileSize, tileSize,
+  tilesetImage:getWidth(), tilesetImage:getHeight())
 end
 
 function love.update(dt)
@@ -69,7 +78,9 @@ function love.draw()
   for i, v in ipairs(map) do
     for i2 = 1, #v do
       if map[i][i2] == 1 then
-        love.graphics.rectangle("fill", (i2 - 1) * 32, (i - 1) * 32, 32, 32)
+        love.graphics.rectangle("fill", (i2 - 1) * tileSize, (i - 1) * tileSize, tileSize, tileSize)
+      elseif map[i][i2] == 0 then
+        love.graphics.draw(tilesetImage, steet,(i2 - 1)*tileSize, (i - 1)*tileSize)
       end
     end
   end
