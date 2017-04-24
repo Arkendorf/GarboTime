@@ -6,6 +6,11 @@ function love.load()
   player.yV = 0
   w, h = love.graphics.getDimensions()
   camera = {x = 0, y = 0}
+  map = {{1, 0, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 1},
+        {1, 0, 0, 0, 0, 1}}
 end
 
 function love.update(dt)
@@ -33,4 +38,11 @@ end
 function love.draw()
   love.graphics.translate(-camera.x + w/ 2, -camera.y + h / 2)
   love.graphics.rectangle("fill", player.x, player.y, 10, 10)
+  for i, v in ipairs(map) do
+    for i2 = 1, #v do
+      if map[i][i2] == 1 then
+        love.graphics.rectangle("fill", (i2 - 1) * 40, (i - 1) * 40, 40, 40)
+      end
+    end
+  end
 end
