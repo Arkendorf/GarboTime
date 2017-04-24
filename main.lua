@@ -74,7 +74,6 @@ end
 
 function love.draw()
   love.graphics.translate(-camera.x + w/ 2, -camera.y + h / 2)
-  love.graphics.rectangle("fill", player.x, player.y, 10, 10)
   for i, v in ipairs(map) do
     for i2 = 1, #v do
       if map[i][i2] == 1 then
@@ -84,4 +83,5 @@ function love.draw()
       end
     end
   end
+  love.graphics.rectangle("fill", player.x, player.y, 10, 10)
 end
