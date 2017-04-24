@@ -1,3 +1,5 @@
+
+require("enemies")
 require("collision")
 function love.load()
   love.graphics.setBackgroundColor(128,128,128)
@@ -15,6 +17,7 @@ function love.load()
         {1, 2, 2, 0, 2, 2, 1}}
 
   tileType = {0, 1, 0}
+  enemies_load()
 
   tilesetImage = love.graphics.newImage("tileset.png")
   tilesetImage:setFilter("nearest", "linear")
@@ -78,6 +81,10 @@ function love.update(dt)
 
   camera.x = player.x
   camera.y = player.y
+
+  for i = 1, #enemies do
+    updateEnemyPath(i)
+  end
 end
 
 function love.draw()
@@ -95,4 +102,16 @@ function love.draw()
     end
   end
   love.graphics.rectangle("fill", player.x, player.y, 10, 10)
+
+  -- draw enemies
+  for i, v in ipairs(enemies) do
+    love.graphics.rectangle("fill", v.x, v.y, 8, 8)
+  end
+
+  -- path test
+  for i, v in ipairs(enemies) do
+    for i2, v2 in ipairs(v.path) do
+      love.graphics.rectangle("line", (v2[1]-1)*8, (v2[2]-1)*8, 8, 8)
+    end
+  end
 end
