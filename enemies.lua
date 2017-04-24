@@ -3,9 +3,10 @@ function enemies_load()
   walkable = 0
   setWalkable(walkable)
   enemies = {}
-  -- newEnemy(65, 64)
-  -- newEnemy(32, 64)
+  newEnemy(64, 64)
   newEnemy(64, 96)
+  newEnemy(96, 64)
+  newEnemy(64, 128)
 end
 
 function newEnemy(eX, eY)
@@ -14,8 +15,9 @@ end
 
 function updateEnemyPath(num)
   setMap(convertMapToNode(map))
-  startingPoint = {x = math.floor(enemies[num].x / 8) + 1, y = math.floor(enemies[num].x / 8) + 1}
+  startingPoint = {x = math.floor(enemies[num].x / 8) + 1, y = math.floor(enemies[num].y / 8) + 1}
   enemies[num].path = findPath({startingPoint.x, startingPoint.y}, { math.floor((player.x + 4) / 8) + 1,  math.floor((player.y + 4) / 8) + 1})
+
 end
 
 function convertMapToNode(map)
