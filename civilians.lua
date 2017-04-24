@@ -12,7 +12,7 @@ function newCivilian(eX, eY)
   civilians[#civilians + 1] = {x = eX, y = eY, path = juliansEvilFunc()}
 end
 
-function juliansEvilFunc ()
+function juliansEvilFunc()
  return findPath({startingPoint2.x, startingPoint2.y}, { math.floor((math.random(#map[1]*32)) / 8) + 1,  math.floor((#map*32) / 8) + 1}) or juliansEvilFunc()
 end
 function updateCivilianPath(num)
