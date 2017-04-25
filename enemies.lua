@@ -7,17 +7,30 @@ function enemies_load()
   newEnemy(64, 96)
   newEnemy(96, 64)
   newEnemy(64, 128)
+  setMap(convertMapToNode(map))
 end
 
 function newEnemy(eX, eY)
-  enemies[#enemies + 1] = {x = eX, y = eY, path = {}}
+  enemies[#enemies + 1] = {x = eX, y = eY, path = {}, goal = {x = math.floor((player.x + 4) / 8) + 1, y = math.floor((player.y + 4) / 8) + 1}}
+end
+
+function enemies_update(dt)
+
+  for i = 1, #enemies do
+    updateEnemyPath(i)
+  end
 end
 
 function updateEnemyPath(num)
-  setMap(convertMapToNode(map))
-  startingPoint = {x = math.floor(enemies[num].x / 8) + 1, y = math.floor(enemies[num].y / 8) + 1}
-  enemies[num].path = findPath({startingPoint.x, startingPoint.y}, { math.floor((player.x + 4) / 8) + 1,  math.floor((player.y + 4) / 8) + 1})
-
+  if math.sqrt((player.x-enemies[num].x)*(player.x-enemies[num].x) + (player.y-enemies[num].y)*(player.y-enemies[num].y)) < 128 then
+    if enemies[num].goal.x ~= math.floor((player.x + 4) / 8) + 1 or enemies[num].goal.x ~= math.floor((player.y + 4) / 8) + 1 then
+      enemies[num].goal = {x = math.floor((player.x + 4) / 8) + 1, y = math.floor((player.y + 4) / 8) + 1}
+      startingPoint = {x = math.floor(enemies[num].x / 8) + 1, y = math.floor(enemies[num].y / 8) + 1}
+      enemies[num].path = findPath({startingPoint.x, startingPoint.y}, {enemies[num].goal.x,  enemies[num].goal.y})
+    end
+  else
+    enemies[num].path = {}
+  end
 end
 
 function convertMapToNode(map)
