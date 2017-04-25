@@ -1,7 +1,9 @@
-
 require("enemies")
 require("collision")
+
 function love.load()
+  healthBar = 8
+
   love.graphics.setBackgroundColor(128,128,128)
   player = {}
   player.x = 32
@@ -88,6 +90,10 @@ function love.update(dt)
 end
 
 function love.draw()
+  love.graphics.setColor(255, 0, 0)
+  love.graphics.rectangle("fill", 0, 0, healthBar*32, 32)
+  love.graphics.setColor(0, 0, 0)
+
   love.graphics.translate(-camera.x + w/ 2, -camera.y + h / 2)
   for i, v in ipairs(map) do
     for i2 = 1, #v do
@@ -105,7 +111,6 @@ function love.draw()
     love.graphics.setColor(0, 255, 255)
     love.graphics.rectangle("fill", player.x, player.y, 8, 8)
 
-
   -- draw enemies
   for i, v in ipairs(enemies) do
     love.graphics.setColor(255, 0, 0)
@@ -119,4 +124,6 @@ function love.draw()
       love.graphics.rectangle("line", (v2[1]-1)*8, (v2[2]-1)*8, 8, 8)
     end
   end
+
+
 end
