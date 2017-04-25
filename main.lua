@@ -92,7 +92,7 @@ end
 function love.draw()
   love.graphics.setColor(255, 0, 0)
   love.graphics.rectangle("fill", 0, 0, healthBar*32, 32)
-  love.graphics.setColor(0, 0, 0)
+  love.graphics.setColor(255, 255, 255)
 
   love.graphics.translate(-camera.x + w/ 2, -camera.y + h / 2)
   for i, v in ipairs(map) do
