@@ -1,4 +1,5 @@
 
+require("modules")
 require("enemies")
 require("collision")
 function love.load()
@@ -10,28 +11,11 @@ function love.load()
   player.yV = 0
   w, h = love.graphics.getDimensions()
   camera = {x = 0, y = 0}
-  map = {{1, 2, 2, 0, 2, 2, 1},
-        {1, 2, 2, 0, 2, 2, 1},
-        {1, 2, 2, 0, 2, 2, 1},
-        {1, 2, 2, 0, 2, 2, 1},
-        {1, 2, 2, 0, 2, 2, 1}}
+  map = mapMaker({{1, 1}, 
+                  {1, 1}})
 
-  tileType = {[0] = 0, [1] = 1, [2] = 0}
-  enemies_load()
+        enemies_load()
 
-  tilesetImage = love.graphics.newImage("tileset.png")
-  tilesetImage:setFilter("nearest", "linear")
-  tileSize = 32
-
-  -- street Yellow
-  street1 = love.graphics.newQuad(1*tileSize, 18*tileSize, tileSize, tileSize,
-  tilesetImage:getWidth(), tilesetImage:getHeight())
-  --street
-  street2 = love.graphics.newQuad(4*tileSize, 18*tileSize, tileSize, tileSize,
-  tilesetImage:getWidth(), tilesetImage:getHeight())
-  -- Brick
-  Brick = love.graphics.newQuad(0*tileSize, 19*tileSize, tileSize, tileSize,
-  tilesetImage:getWidth(), tilesetImage:getHeight())
 end
 
 function love.update(dt)
@@ -85,20 +69,18 @@ function love.update(dt)
   for i = 1, #enemies do
     updateEnemyPath(i)
   end
+
+
 end
 
 function love.draw()
   love.graphics.translate(-camera.x + w/ 2, -camera.y + h / 2)
+
   for i, v in ipairs(map) do
     for i2 = 1, #v do
-      if map[i][i2] == 1 then
-          love.graphics.draw(tilesetImage, Brick,(i2 - 1)*tileSize, (i - 1)*tileSize)
-      elseif map[i][i2] == 0 then
-        love.graphics.draw(tilesetImage, street1,(i2 - 1)*tileSize, (i - 1)*tileSize)
-      elseif map[i][i2] == 2 then
-        love.graphics.draw(tilesetImage, street2,(i2 - 1)*tileSize, (i - 1)*tileSize)
 
-      end
+          love.graphics.draw(tilesetImage, tiles[map[i][i2]],(i2 - 1)*tileSize, (i - 1)*tileSize)
+
     end
   end
   love.graphics.rectangle("fill", player.x, player.y, 8, 8)
