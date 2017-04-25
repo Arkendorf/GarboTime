@@ -1,6 +1,7 @@
 
 require("enemies")
 require("collision")
+require("shader")
 function love.load()
   love.graphics.setBackgroundColor(128,128,128)
   player = {}
@@ -12,12 +13,11 @@ function love.load()
   camera = {x = 0, y = 0}
   map = {{1, 2, 2, 0, 2, 2, 1},
         {1, 2, 2, 0, 2, 2, 1},
-        {0, 2, 2, 0, 2, 2, 0},
+        {1, 2, 2, 0, 2, 2, 1},
         {1, 2, 2, 0, 2, 2, 1},
         {1, 2, 2, 0, 2, 2, 1}}
 
   tileType = {[0] = 0, [1] = 1, [2] = 0}
-  enemies_load()
 
   tilesetImage = love.graphics.newImage("tileset.png")
   tilesetImage:setFilter("nearest", "linear")
@@ -32,6 +32,9 @@ function love.load()
   -- Brick
   Brick = love.graphics.newQuad(0*tileSize, 19*tileSize, tileSize, tileSize,
   tilesetImage:getWidth(), tilesetImage:getHeight())
+
+  shader_load()
+  enemies_load()
 end
 
 function love.update(dt)
@@ -79,15 +82,15 @@ function love.update(dt)
   if player.x < 0 then
     player.x = 0
     player.xV = 0
-  elseif player.x > #map[1]*32-8 then
-    player.x = #map[1]*32-8
+  elseif player.x > #map[1]*tileSize-8 then
+    player.x = #map[1]*tileSize-8
     player.xV = 0
   end
   if player.y < 0 then
     player.y = 0
     player.yV = 0
-  elseif player.y > #map*32-8 then
-    player.y = #map*32-8
+  elseif player.y > #map*tileSize-8 then
+    player.y = #map*tileSize-8
     player.yV = 0
   end
 
@@ -101,10 +104,15 @@ function love.update(dt)
   for i = 1, #enemies do
     updateEnemyPath(i)
   end
+  shader_update(dt)
+  renderShader()
 end
 
 function love.draw()
+  love.graphics.push()
   love.graphics.translate(-camera.x + w/ 2, -camera.y + h / 2)
+  love.graphics.setColor(255, 255, 255)
+
   for i, v in ipairs(map) do
     for i2 = 1, #v do
       if map[i][i2] == 1 then
@@ -135,4 +143,8 @@ function love.draw()
       love.graphics.rectangle("line", (v2[1]-1)*8, (v2[2]-1)*8, 8, 8)
     end
   end
+
+  love.graphics.pop()
+  love.graphics.setColor(255, 255, 255, 100)
+  love.graphics.draw(shaderCanvas, 0, 0)
 end
