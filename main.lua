@@ -1,8 +1,11 @@
-
+require("modules")
 require("enemies")
 require("collision")
 require("shader")
+
 function love.load()
+  healthBar = 8
+
   love.graphics.setBackgroundColor(128,128,128)
   player = {}
   player.x = 32
@@ -11,27 +14,8 @@ function love.load()
   player.yV = 0
   w, h = love.graphics.getDimensions()
   camera = {x = 0, y = 0}
-  map = {{1, 2, 2, 0, 2, 2, 1},
-        {1, 2, 2, 0, 2, 2, 1},
-        {1, 2, 2, 0, 2, 2, 1},
-        {1, 2, 2, 0, 2, 2, 1},
-        {1, 2, 2, 0, 2, 2, 1}}
-
-  tileType = {[0] = 0, [1] = 1, [2] = 0}
-
-  tilesetImage = love.graphics.newImage("tileset.png")
-  tilesetImage:setFilter("nearest", "linear")
-  tileSize = 32
-
-  -- street Yellow
-  street1 = love.graphics.newQuad(1*tileSize, 18*tileSize, tileSize, tileSize,
-  tilesetImage:getWidth(), tilesetImage:getHeight())
-  --street
-  street2 = love.graphics.newQuad(4*tileSize, 18*tileSize, tileSize, tileSize,
-  tilesetImage:getWidth(), tilesetImage:getHeight())
-  -- Brick
-  Brick = love.graphics.newQuad(0*tileSize, 19*tileSize, tileSize, tileSize,
-  tilesetImage:getWidth(), tilesetImage:getHeight())
+  map = mapMaker({{1, 1},
+                  {1, 1}})
 
   shader_load()
   enemies_load()
@@ -101,34 +85,30 @@ function love.update(dt)
   camera.x = player.x
   camera.y = player.y
 
-  for i = 1, #enemies do
-    updateEnemyPath(i)
-  end
+  enemies_update(dt)
   shader_update(dt)
   renderShader()
 end
 
 function love.draw()
+  love.graphics.setColor(255, 0, 0)
+  love.graphics.rectangle("fill", love.graphics.getWidth()/2 - (healthBar*32)/2, 0, healthBar*32, 32)
+  love.graphics.setColor(255, 255, 255)
+
   love.graphics.push()
   love.graphics.translate(-camera.x + w/ 2, -camera.y + h / 2)
   love.graphics.setColor(255, 255, 255)
 
   for i, v in ipairs(map) do
     for i2 = 1, #v do
-      if map[i][i2] == 1 then
-          love.graphics.draw(tilesetImage, Brick,(i2 - 1)*tileSize, (i - 1)*tileSize)
-      elseif map[i][i2] == 0 then
-        love.graphics.draw(tilesetImage, street1,(i2 - 1)*tileSize, (i - 1)*tileSize)
-      elseif map[i][i2] == 2 then
-        love.graphics.draw(tilesetImage, street2,(i2 - 1)*tileSize, (i - 1)*tileSize)
 
-      end
+          love.graphics.draw(tilesetImage, tiles[map[i][i2]],(i2 - 1)*tileSize, (i - 1)*tileSize)
+
     end
   end
   -- draw player
     love.graphics.setColor(0, 255, 255)
     love.graphics.rectangle("fill", player.x, player.y, 8, 8)
-
 
   -- draw enemies
   for i, v in ipairs(enemies) do
@@ -143,7 +123,7 @@ function love.draw()
       love.graphics.rectangle("line", (v2[1]-1)*8, (v2[2]-1)*8, 8, 8)
     end
   end
-
+  
   love.graphics.pop()
   love.graphics.setColor(255, 255, 255, 100)
   love.graphics.draw(shaderCanvas, 0, 0)
