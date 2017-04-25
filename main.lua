@@ -12,7 +12,7 @@ function love.load()
   camera = {x = 0, y = 0}
   map = {{1, 2, 2, 0, 2, 2, 1},
         {1, 2, 2, 0, 2, 2, 1},
-        {1, 2, 2, 0, 2, 2, 1},
+        {0, 2, 2, 0, 2, 2, 0},
         {1, 2, 2, 0, 2, 2, 1},
         {1, 2, 2, 0, 2, 2, 1}}
 
@@ -75,6 +75,22 @@ function love.update(dt)
     player.yV = 0
   end
   player.y = player.y + player.yV
+
+  if player.x < 0 then
+    player.x = 0
+    player.xV = 0
+  elseif player.x > #map[1]*32-8 then
+    player.x = #map[1]*32-8
+    player.xV = 0
+  end
+  if player.y < 0 then
+    player.y = 0
+    player.yV = 0
+  elseif player.y > #map*32-8 then
+    player.y = #map*32-8
+    player.yV = 0
+  end
+
 
   player.xV = player.xV * 0.8
   player.yV = player.yV * 0.8

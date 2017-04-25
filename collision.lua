@@ -10,11 +10,21 @@ function collision(x1, y1, w1, h1, x2, y2, w2, h2)
 end
 
 function playerCollide(x, y)
-  local playerTile = {x = math.floor(x / tileSize), y = math.floor(y / tileSize)}
+  local playerTile = {x = math.floor(x / tileSize) + 1, y = math.floor(y / tileSize) + 1}
   for i = 1, 3 do
     for i2 = 1, 3 do
       tileToCheck = {x = playerTile.x - 2 + i2, y = playerTile.y - 2 + i}
-      if tileType[map[tileToCheck.y][tileToCheck.x]] == 1 and collision(x, y, 8, 8, tileToCheck.x * 32, tileToCheck.y * 32, tileSize, tileSize) then
+      if tileToCheck.x < 1 then
+        tileToCheck.x = 1
+      elseif tileToCheck.x > #map[1] then
+        tileToCheck.x = #map[1]
+      end
+      if tileToCheck.y < 1 then
+        tileToCheck.y = 1
+      elseif tileToCheck.y > #map then
+        tileToCheck.y = #map
+      end
+      if tileType[map[tileToCheck.y][tileToCheck.x]] == 1 and collision(x, y, 8, 8, (tileToCheck.x - 1) * 32, (tileToCheck.y - 1) * 32, tileSize, tileSize) then
         return true
       end
     end
