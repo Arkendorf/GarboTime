@@ -4,7 +4,7 @@ function shader_load()
 end
 
 function shader_update(dt)
-  timeOfDay = timeOfDay + dt * 10
+  timeOfDay = timeOfDay + dt * 15
   if timeOfDay > 240 then
     timeOfDay = 0
   end
@@ -13,7 +13,7 @@ end
 function renderShader()
   love.graphics.setCanvas(shaderCanvas)
   love.graphics.clear()
-  love.graphics.setColor(0, 0, 20, math.abs(timeOfDay - 120) * 4.25)
+  love.graphics.setColor(0, 0, 20, math.abs(timeOfDay - 120) * 3)
   love.graphics.rectangle("fill", 0, 0, w, h)
   love.graphics.translate(-camera.x + w/ 2, -camera.y + h / 2)
 
@@ -43,9 +43,9 @@ function drawShadow(x, y, size)
     return
   elseif timeOfDay > 120 then
     love.graphics.setColor(0, 0, 20)
-    love.graphics.rectangle("fill", x, y, size, -math.abs(timeOfDay-120))
+    love.graphics.rectangle("fill", x, y, size, -math.abs(timeOfDay-120)*size/32)
   elseif timeOfDay < 120 then
     love.graphics.setColor(0, 0, 20)
-    love.graphics.rectangle("fill", x, y+size, size, math.abs(timeOfDay-120))
+    love.graphics.rectangle("fill", x, y+size, size, math.abs(timeOfDay-120)*size/32)
   end
 end
