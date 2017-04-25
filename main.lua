@@ -2,6 +2,7 @@
 require("modules")
 require("enemies")
 require("collision")
+require("shader")
 function love.load()
   love.graphics.setBackgroundColor(128,128,128)
   player = {}
@@ -14,8 +15,8 @@ function love.load()
   map = mapMaker({{1, 1}, 
                   {1, 1}})
 
-        enemies_load()
-
+  shader_load()
+  enemies_load()
 end
 
 function love.update(dt)
@@ -60,6 +61,22 @@ function love.update(dt)
   end
   player.y = player.y + player.yV
 
+  if player.x < 0 then
+    player.x = 0
+    player.xV = 0
+  elseif player.x > #map[1]*tileSize-8 then
+    player.x = #map[1]*tileSize-8
+    player.xV = 0
+  end
+  if player.y < 0 then
+    player.y = 0
+    player.yV = 0
+  elseif player.y > #map*tileSize-8 then
+    player.y = #map*tileSize-8
+    player.yV = 0
+  end
+
+
   player.xV = player.xV * 0.8
   player.yV = player.yV * 0.8
 
@@ -69,12 +86,15 @@ function love.update(dt)
   for i = 1, #enemies do
     updateEnemyPath(i)
   end
-
-
+  
+  shader_update(dt)
+  renderShader()
 end
 
 function love.draw()
+  love.graphics.push()
   love.graphics.translate(-camera.x + w/ 2, -camera.y + h / 2)
+  love.graphics.setColor(255, 255, 255)
 
   for i, v in ipairs(map) do
     for i2 = 1, #v do
@@ -83,12 +103,17 @@ function love.draw()
 
     end
   end
-  love.graphics.rectangle("fill", player.x, player.y, 8, 8)
+  -- draw player
+    love.graphics.setColor(0, 255, 255)
+    love.graphics.rectangle("fill", player.x, player.y, 8, 8)
+
 
   -- draw enemies
   for i, v in ipairs(enemies) do
+    love.graphics.setColor(255, 0, 0)
     love.graphics.rectangle("fill", v.x, v.y, 8, 8)
   end
+  love.graphics.setColor(255, 255, 255)
 
   -- path test
   for i, v in ipairs(enemies) do
@@ -96,4 +121,8 @@ function love.draw()
       love.graphics.rectangle("line", (v2[1]-1)*8, (v2[2]-1)*8, 8, 8)
     end
   end
+
+  love.graphics.pop()
+  love.graphics.setColor(255, 255, 255, 100)
+  love.graphics.draw(shaderCanvas, 0, 0)
 end
