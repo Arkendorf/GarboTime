@@ -12,7 +12,7 @@ function love.load()
   player.yV = 0
   w, h = love.graphics.getDimensions()
   camera = {x = 0, y = 0}
-  map = mapMaker({{1, 1}, 
+  map = mapMaker({{1, 1},
                   {1, 1}})
 
   shader_load()
@@ -83,10 +83,7 @@ function love.update(dt)
   camera.x = player.x
   camera.y = player.y
 
-  for i = 1, #enemies do
-    updateEnemyPath(i)
-  end
-  
+  enemies_update(dt)
   shader_update(dt)
   renderShader()
 end
