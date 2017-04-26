@@ -2,6 +2,7 @@ require("modules")
 require("enemies")
 require("collision")
 require("shader")
+require("explosion")
 
 function love.load()
   healthBar = 8
@@ -35,13 +36,13 @@ function love.update(dt)
     player.xV = player.xV + 1
   end
 
-  if playerCollide(player.x + player.xV, player.y) then
+  if collideWithMap(player.x + player.xV, player.y, 8, 8, "player") then
     if player.xV > 0 then
-      while playerCollide(player.x + 1, player.y) == false do
+      while collideWithMap(player.x + 1, player.y, 8, 8, "player") == false do
         player.x = player.x + 1
       end
     else
-      while playerCollide(player.x - 1, player.y) == false do
+      while collideWithMap(player.x - 1, player.y, 8, 8, "player") == false do
         player.x = player.x - 1
       end
     end
@@ -49,13 +50,13 @@ function love.update(dt)
   end
   player.x = player.x + player.xV
 
-  if playerCollide(player.x, player.y + player.yV) then
+  if collideWithMap(player.x, player.y + player.yV, 8, 8, "player") then
     if player.yV > 0 then
-      while playerCollide(player.x, player.y + 1) == false do
+      while collideWithMap(player.x, player.y + 1, 8, 8, "player") == false do
         player.y = player.y + 1
       end
     else
-      while playerCollide(player.x, player.y - 1) == false do
+      while collideWithMap(player.x, player.y - 1, 8, 8, "player") == false do
         player.y = player.y - 1
       end
     end
@@ -112,13 +113,6 @@ function love.draw()
     love.graphics.rectangle("fill", v.x, v.y, 8, 8)
   end
   love.graphics.setColor(255, 255, 255)
-
-  -- path test
-  for i, v in ipairs(enemies) do
-    for i2, v2 in ipairs(v.path) do
-      love.graphics.rectangle("line", (v2[1]-1)*8, (v2[2]-1)*8, 8, 8)
-    end
-  end
 
   love.graphics.pop()
   love.graphics.setColor(255, 255, 255, 100)
