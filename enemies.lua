@@ -16,12 +16,12 @@ end
 
 function enemies_update(dt)
   for i = 1, #enemies do
-    updateEnemyPath(i, dt)
+    updateEnemy(i, dt)
   end
   enemies = removeNil(enemies)
 end
 
-function updateEnemyPath(num, dt)
+function updateEnemy(num, dt)
   if enemies[num].timer < explosionTimer then
     enemies[num].timer = enemies[num].timer - dt
     if enemies[num].timer <=0 then
@@ -32,6 +32,7 @@ function updateEnemyPath(num, dt)
     if advancedCollideWithMap(enemies[num].x + enemies[num].w/2, enemies[num].y + enemies[num].h/2, enemies[num].w, enemies[num].h, 0, "enemy", num) == "dead" then
       newExplosion(enemies[num].x, enemies[num].y)
       enemies[num] = nil
+      addAmmo()
       if inUse > 0 then
         vehicles[inUse].hp = vehicles[inUse].hp-1
       end
@@ -39,7 +40,7 @@ function updateEnemyPath(num, dt)
       local dist = math.sqrt((player.x-enemies[num].x)*(player.x-enemies[num].x) + (player.y-enemies[num].y)*(player.y-enemies[num].y))
       if dist < 9 then
         enemies[num].timer = enemies[num].timer - dt
-      elseif dist < 128 then
+      elseif dist < 128 and inUse < 1 then
         oldPos = {x = enemies[num].x, y = enemies[num].y}
         if (player.x-enemies[num].x) > 0 then
           enemies[num].xV = enemies[num].xV + 0.5
@@ -86,6 +87,15 @@ function updateEnemyPath(num, dt)
       if enemies[num].x == enemies[num].oldPos.x and enemies[num].y == enemies[num].oldPos.y then
         enemies[num].timer = enemies[num].timer - dt
       end
+    end
+  end
+  for i, v in ipairs(bullets) do
+    if collision(v.x, v.y, 2, 2, enemies[num].x, enemies[num].y, enemies[num].w, enemies[num].h) then
+      newExplosion(enemies[num].x, enemies[num].y)
+      addAmmo()
+      enemies[num] = nil
+      table.remove(bullets, i)
+      break
     end
   end
 end

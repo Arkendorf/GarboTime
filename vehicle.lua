@@ -26,6 +26,10 @@ function vehicles_update(dt)
     if love.keyboard.isDown("d") then
       vehicles[inUse].goalAngle = vehicles[inUse].goalAngle + dt * vehicles[inUse].turn
     end
+    if vehicles[inUse].type > 2 and love.mouse.isDown(1) then
+      mX, mY = love.mouse.getPosition()
+      newBullet(mX + math.random(1, 10), mY + math.random(1, 10))
+    end
   end
 
   for i, v in ipairs(vehicles) do

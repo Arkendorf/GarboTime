@@ -71,11 +71,11 @@ function collideWithMap(x, y, w, h, type, num)
     end
   end
   for i, v in ipairs(enemies) do
-    if (type ~= "enemy" or num ~= i) and collision(x, y, w, h, v.x, v.y, v.w, v.h) then
+    if (type ~= "enemy" or num ~= i) and type ~= "bullet" and collision(x, y, w, h, v.x, v.y, v.w, v.h) then
       return true
     end
   end
-  if type ~= "player" and collision(x, y, w, h, player.x, player.y, 8, 8) then
+  if type ~= "player" and type ~= "bullet" and collision(x, y, w, h, player.x, player.y, player.w, player.h) then
     return true
   end
   return false
@@ -119,7 +119,7 @@ function advancedCollideWithMap(x, y, w, h, a, type, num)
       return true
     end
   end
-  if type ~= "player" and advancedCollision(x, y, w, h, a, player.x + 4, player.y + 4, 8, 8, 0) then
+  if type ~= "player" and advancedCollision(x, y, w, h, a, player.x + player.w/2, player.y + player.h/2, player.w, player.h, 0) then
     return true
   end
   return false
@@ -128,7 +128,7 @@ end
 function oldPlayerCollide(x, y)
   for i, v in ipairs(map) do
     for i2 = 1, #map[i] do
-      if tileType[map[i][i2]] == 1 and collision(x, y, 8, 8, (i2-1)*32, (i-1)*32, 32, 32) then
+      if tileType[map[i][i2]] == 1 and collision(x, y, player.w, player.h, (i2-1)*32, (i-1)*32, 32, 32) then
         return true
       end
     end
