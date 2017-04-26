@@ -9,11 +9,16 @@ function collision(x1, y1, w1, h1, x2, y2, w2, h2)
   end
 end
 
-function playerCollide(x, y)
-  local playerTile = {x = math.floor(x / tileSize) + 1, y = math.floor(y / tileSize) + 1}
+function collideWithMap(x, y, w, h, type, num)
+  local objTile = {x = math.floor(x / tileSize) + 1, y = math.floor(y / tileSize) + 1}
+  if w + h < tileSize then
+    tileRadius = 3
+  else
+    tileRadius = math.ceil((w + h) / 32) + 2
+  end
   for i = 1, 3 do
     for i2 = 1, 3 do
-      tileToCheck = {x = playerTile.x - 2 + i2, y = playerTile.y - 2 + i}
+      tileToCheck = {x = objTile.x - math.ceil(tileRadius/2) + i2, y = objTile.y - math.ceil(tileRadius/2) + i}
       if tileToCheck.x < 1 then
         tileToCheck.x = 1
       elseif tileToCheck.x > #map[1] then
@@ -24,10 +29,18 @@ function playerCollide(x, y)
       elseif tileToCheck.y > #map then
         tileToCheck.y = #map
       end
-      if tileType[map[tileToCheck.y][tileToCheck.x]] == 1 and collision(x, y, 8, 8, (tileToCheck.x - 1) * 32, (tileToCheck.y - 1) * 32, tileSize, tileSize) then
+      if tileType[map[tileToCheck.y][tileToCheck.x]] == 1 and collision(x, y, w, h, (tileToCheck.x - 1) * tileSize, (tileToCheck.y - 1) * tileSize, tileSize, tileSize) then
         return true
       end
     end
+  end
+  for i, v in ipairs(enemies) do
+    if (type ~= "enemy" or num ~= i) and collision(x, y, w, h, v.x, v.y, v.w, v.h) then
+      return true
+    end
+  end
+  if type ~= "player" and collision(x, y, w, h, player.x, player.y, 8, 8) then
+    return true
   end
   return false
 end

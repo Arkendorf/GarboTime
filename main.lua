@@ -1,10 +1,13 @@
-
 require("bullet")
 require("modules")
 require("enemies")
 require("collision")
 require("shader")
+require("explosion")
+
 function love.load()
+  healthBar = 8
+
   love.graphics.setBackgroundColor(128,128,128)
   player = {x = 32, y = 0, xV = 0, yV = 0, w = 8, h = 8}
   --player.x = 32
@@ -36,13 +39,13 @@ function love.update(dt)
     player.xV = player.xV + 1
   end
 
-  if playerCollide(player.x + player.xV, player.y) then
+  if collideWithMap(player.x + player.xV, player.y, 8, 8, "player") then
     if player.xV > 0 then
-      while playerCollide(player.x + 1, player.y) == false do
+      while collideWithMap(player.x + 1, player.y, 8, 8, "player") == false do
         player.x = player.x + 1
       end
     else
-      while playerCollide(player.x - 1, player.y) == false do
+      while collideWithMap(player.x - 1, player.y, 8, 8, "player") == false do
         player.x = player.x - 1
       end
     end
@@ -50,13 +53,13 @@ function love.update(dt)
   end
   player.x = player.x + player.xV
 
-  if playerCollide(player.x, player.y + player.yV) then
+  if collideWithMap(player.x, player.y + player.yV, 8, 8, "player") then
     if player.yV > 0 then
-      while playerCollide(player.x, player.y + 1) == false do
+      while collideWithMap(player.x, player.y + 1, 8, 8, "player") == false do
         player.y = player.y + 1
       end
     else
-      while playerCollide(player.x, player.y - 1) == false do
+      while collideWithMap(player.x, player.y - 1, 8, 8, "player") == false do
         player.y = player.y - 1
       end
     end
@@ -110,6 +113,7 @@ function love.draw()
     love.graphics.setColor(0, 255, 255)
     love.graphics.rectangle("fill", player.x, player.y, player.w, player.h)
 
+  -- draw bullets
     love.graphics.setColor(128,128,128)
     for i,v in ipairs(bullets) do
       love.graphics.circle("fill", v.x, v.y, 3)
@@ -122,16 +126,11 @@ function love.draw()
   end
   love.graphics.setColor(255, 255, 255)
 
-  -- path test
-  for i, v in ipairs(enemies) do
-    for i2, v2 in ipairs(v.path) do
-      love.graphics.rectangle("line", (v2[1]-1)*8, (v2[2]-1)*8, 8, 8)
-    end
-  end
-
   love.graphics.pop()
   love.graphics.setColor(255, 255, 255, 100)
   love.graphics.draw(shaderCanvas, 0, 0)
 
-  love.graphics.print((tostring(angled)), 10, 10)
+  love.graphics.setColor(255, 0, 0)
+  love.graphics.rectangle("fill", love.graphics.getWidth()/2 - (healthBar*32)/2, 0, healthBar*32, 32)
+  love.graphics.setColor(255, 255, 255)
 end
