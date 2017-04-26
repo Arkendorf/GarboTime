@@ -29,55 +29,63 @@ function updateEnemyPath(num, dt)
       enemies[num] = nil
     end
   else
-    local dist = math.sqrt((player.x-enemies[num].x)*(player.x-enemies[num].x) + (player.y-enemies[num].y)*(player.y-enemies[num].y))
-    if dist < 9 then
-      enemies[num].timer = enemies[num].timer - dt
-    elseif dist < 128 then
-      oldPos = {x = enemies[num].x, y = enemies[num].y}
-      if (player.x-enemies[num].x) > 0 then
-        enemies[num].xV = enemies[num].xV + 0.5
-      elseif (player.x-enemies[num].x) < 0 then
-        enemies[num].xV = enemies[num].xV - 0.5
+    if advancedCollideWithMap(enemies[num].x + enemies[num].w/2, enemies[num].y + enemies[num].h/2, enemies[num].w, enemies[num].h, 0, "enemy", num) == "dead" then
+      newExplosion(enemies[num].x, enemies[num].y)
+      enemies[num] = nil
+      if inUse > 0 then
+        vehicles[inUse].hp = vehicles[inUse].hp-1
       end
-      if (player.y-enemies[num].y) > 0 then
-        enemies[num].yV = enemies[num].yV + 0.5
-      elseif (player.y-enemies[num].y) < 0 then
-        enemies[num].yV = enemies[num].yV - 0.5
-      end
-    end
-    if collideWithMap(enemies[num].x + enemies[num].xV, enemies[num].y, enemies[num].w, enemies[num].h, "enemy", num) then
-      if enemies[num].xV > 0 then
-        while collideWithMap(enemies[num].x + 1, enemies[num].y, enemies[num].w, enemies[num].h, "enemy", num) == false do
-          enemies[num].x = enemies[num].x + 1
+    else
+      local dist = math.sqrt((player.x-enemies[num].x)*(player.x-enemies[num].x) + (player.y-enemies[num].y)*(player.y-enemies[num].y))
+      if dist < 9 then
+        enemies[num].timer = enemies[num].timer - dt
+      elseif dist < 128 then
+        oldPos = {x = enemies[num].x, y = enemies[num].y}
+        if (player.x-enemies[num].x) > 0 then
+          enemies[num].xV = enemies[num].xV + 0.5
+        elseif (player.x-enemies[num].x) < 0 then
+          enemies[num].xV = enemies[num].xV - 0.5
         end
-      else
-        while collideWithMap(enemies[num].x - 1, enemies[num].y, enemies[num].w, enemies[num].h, "enemy", num) == false do
-          enemies[num].x = enemies[num].x - 1
+        if (player.y-enemies[num].y) > 0 then
+          enemies[num].yV = enemies[num].yV + 0.5
+        elseif (player.y-enemies[num].y) < 0 then
+          enemies[num].yV = enemies[num].yV - 0.5
         end
       end
-      enemies[num].xV = 0
-    end
-    enemies[num].x = enemies[num].x + enemies[num].xV
+      if advancedCollideWithMap(enemies[num].x + enemies[num].xV + enemies[num].w/2, enemies[num].y + enemies[num].h/2, enemies[num].w, enemies[num].h, 0, "enemy", num) then
+        if enemies[num].xV > 0 then
+          while advancedCollideWithMap(enemies[num].x + 1 + enemies[num].w/2, enemies[num].y + enemies[num].h/2, enemies[num].w, enemies[num].h, 0, "enemy", num) == false do
+            enemies[num].x = enemies[num].x + 1
+          end
+        else
+          while advancedCollideWithMap(enemies[num].x - 1 + enemies[num].w/2, enemies[num].y + enemies[num].h/2, enemies[num].w, enemies[num].h, 0, "enemy", num) == false do
+            enemies[num].x = enemies[num].x - 1
+          end
+        end
+        enemies[num].xV = 0
+      end
+      enemies[num].x = enemies[num].x + enemies[num].xV
 
-    if collideWithMap(enemies[num].x, enemies[num].y + enemies[num].yV, enemies[num].w, enemies[num].h, "enemy", num) then
-      if enemies[num].yV > 0 then
-        while collideWithMap(enemies[num].x, enemies[num].y + 1, enemies[num].w, enemies[num].h, "enemy", num) == false do
-          enemies[num].y = enemies[num].y + 1
+      if advancedCollideWithMap(enemies[num].x + enemies[num].w/2, enemies[num].y + enemies[num].yV + enemies[num].h/2, enemies[num].w, enemies[num].h, 0, "enemy", num) then
+        if enemies[num].yV > 0 then
+          while advancedCollideWithMap(enemies[num].x + enemies[num].w/2, enemies[num].y + 1 + enemies[num].h/2, enemies[num].w, enemies[num].h, 0, "enemy", num) == false do
+            enemies[num].y = enemies[num].y + 1
+          end
+        else
+          while advancedCollideWithMap(enemies[num].x + enemies[num].w/2, enemies[num].y - 1 + enemies[num].h/2, enemies[num].w, enemies[num].h, 0, "enemy", num) == false do
+            enemies[num].y = enemies[num].y - 1
+          end
         end
-      else
-        while collideWithMap(enemies[num].x, enemies[num].y - 1, enemies[num].w, enemies[num].h, "enemy", num) == false do
-          enemies[num].y = enemies[num].y - 1
-        end
+        enemies[num].yV = 0
       end
-      enemies[num].yV = 0
-    end
-    enemies[num].y = enemies[num].y + enemies[num].yV
+      enemies[num].y = enemies[num].y + enemies[num].yV
 
-    enemies[num].xV = enemies[num].xV * 0.8
-    enemies[num].yV = enemies[num].yV * 0.8
+      enemies[num].xV = enemies[num].xV * 0.8
+      enemies[num].yV = enemies[num].yV * 0.8
 
-    if enemies[num].x == enemies[num].oldPos.x and enemies[num].y == enemies[num].oldPos.y then
-      enemies[num].timer = enemies[num].timer - dt
+      if enemies[num].x == enemies[num].oldPos.x and enemies[num].y == enemies[num].oldPos.y then
+        enemies[num].timer = enemies[num].timer - dt
+      end
     end
   end
 end
