@@ -69,20 +69,6 @@ function love.update(dt)
     player.x = vehicles[inUse].x
     player.y = vehicles[inUse].y
   end
-  if player.x < 0 then
-    player.x = 0
-    player.xV = 0
-  elseif player.x > #map[1]*tileSize-player.w then
-    player.x = #map[1]*tileSize-player.w
-    player.xV = 0
-  end
-  if player.y < 0 then
-    player.y = 0
-    player.yV = 0
-  elseif player.y > #map*tileSize-player.h then
-    player.y = #map*tileSize-player.h
-    player.yV = 0
-  end
 
   player.xV = player.xV * 0.8
   player.yV = player.yV * 0.8
@@ -102,7 +88,15 @@ function love.update(dt)
   vehicles_update(dt)
   renderShader()
 
-  if love.keyboard.isDown("space") then
+  if love.keyboard.isDown("space") and inUse > 0 then
+    newPos = rotate(0, vehicles[inUse].h/2 + player.h, vehicles[inUse].newAngle)
+    player.x = vehicles[inUse].x + newPos[1]- player.w/2
+    player.y = vehicles[inUse].y + newPos[2]- player.h/2
+    if collideWithMap(player.x + player.w/2, player.y + player.h/2, player.w, player.h, "player") then
+      newPos = rotate(0, -vehicles[inUse].h/2 - player.h, vehicles[inUse].newAngle)
+      player.x = vehicles[inUse].x + newPos[1]- player.w/2
+      player.y = vehicles[inUse].y + newPos[2]- player.h/2
+    end
     inUse = 0
   end
 end
@@ -124,13 +118,6 @@ function love.draw()
     love.graphics.setColor(0, 255, 255)
     love.graphics.rectangle("fill", player.x, player.y, player.w, player.h)
 
-  -- draw bullets
-    love.graphics.setColor(128, 128, 128)
-    for i,v in ipairs(bullets) do
-      love.graphics.circle("fill", v.x, v.y, 3)
-    end
-
-
   -- draw enemies
   for i, v in ipairs(enemies) do
     love.graphics.setColor(255, 0, 0)
@@ -141,15 +128,22 @@ function love.draw()
   for i, v in ipairs(vehicles) do
     love.graphics.setColor(255, 255, 255)
     if v.type == 1 then
-      love.graphics.draw(vehicleImg[1], v.x, v.y, v.angle, 1, 1, v.w/2, v.h/2)
+      love.graphics.draw(vehicleImg[1], v.x, v.y, v.newAngle, 1, 1, v.w/2, v.h/2)
     elseif v.type == 2 then
-      love.graphics.draw(vehicleImg[2], v.x, v.y, v.angle, 1, 1, v.w/2, v.h/2)
+      love.graphics.draw(vehicleImg[2], v.x, v.y, v.newAngle, 1, 1, v.w/2, v.h/2)
     elseif v.type == 3 then
-      love.graphics.draw(vehicleImg[3], v.x, v.y, v.angle, 1, 1, v.w/2, v.h/2)
+      love.graphics.draw(vehicleImg[3], v.x, v.y, v.newAngle, 1, 1, v.w/2, v.h/2)
     else
-      love.graphics.draw(vehicleImg[4], v.x, v.y, v.angle, 1, 1, v.w/2, v.h/2)
+      love.graphics.draw(vehicleImg[4], v.x, v.y, v.newAngle, 1, 1, v.w/2, v.h/2)
     end
   end
+
+  -- draw bullets
+  love.graphics.setColor(128, 128, 128)
+  for i,v in ipairs(bullets) do
+    love.graphics.circle("fill", v.x, v.y, 3)
+  end
+
   love.graphics.setColor(255, 255, 255)
 
   love.graphics.pop()

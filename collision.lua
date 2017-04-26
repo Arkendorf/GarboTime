@@ -71,11 +71,21 @@ function collideWithMap(x, y, w, h, type, num)
     end
   end
   for i, v in ipairs(enemies) do
-    if (type ~= "enemy" or num ~= i) and type ~= "bullet" and collision(x, y, w, h, v.x, v.y, v.w, v.h) then
+    if (type ~= "enemy" or num ~= i) and type ~= "bullet" and type ~= "vehicle" and collision(x, y, w, h, v.x, v.y, v.w, v.h) then
       return true
     end
   end
   if type ~= "player" and type ~= "bullet" and collision(x, y, w, h, player.x, player.y, player.w, player.h) then
+    return true
+  end
+  if x < 0 then
+    return true
+  elseif x > #map[1] * 32 then
+    return true
+  end
+  if y < 0 then
+    return true
+  elseif y > #map * 32 then
     return true
   end
   return false
@@ -107,7 +117,7 @@ function advancedCollideWithMap(x, y, w, h, a, type, num)
     end
   end
   for i, v in ipairs(enemies) do
-    if (type ~= "enemy" or num ~= i) and advancedCollision(x, y, w, h, a, v.x + v.w/2, v.y + v.h/2, v.w, v.h, 0) then
+    if (type ~= "enemy" or num ~= i) and type ~= "vehicle" and advancedCollision(x, y, w, h, a, v.x + v.w/2, v.y + v.h/2, v.w, v.h, 0) then
       return true
     end
   end
@@ -120,6 +130,16 @@ function advancedCollideWithMap(x, y, w, h, a, type, num)
     end
   end
   if type ~= "player" and advancedCollision(x, y, w, h, a, player.x + player.w/2, player.y + player.h/2, player.w, player.h, 0) then
+    return true
+  end
+  if x < 0 then
+    return true
+  elseif x > #map[1] * 32 then
+    return true
+  end
+  if y < 0 then
+    return true
+  elseif y > #map * 32 then
     return true
   end
   return false
