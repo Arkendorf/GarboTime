@@ -9,11 +9,16 @@ function love.load()
   healthBar = 8
 
   love.graphics.setBackgroundColor(128,128,128)
-  player = {x = 32, y = 0, xV = 0, yV = 0, w = 8, h = 8}
+  bulletSpeed = 250
+
+	bullets = {}
+	player = {x=32, y=0, xV = 0, yV = 0, w = 8, h = 8}
+  --player = {x = 32, y = 0, xV = 0, yV = 0, w = 8, h = 8}
   --player.x = 32
   --player.y = 0
   --player.xV = 0
   --player.yV = 0
+  menu = true
 
   w, h = love.graphics.getDimensions()
   camera = {x = 0, y = 0}
@@ -22,7 +27,6 @@ function love.load()
 
   shader_load()
   enemies_load()
-  bullet_load()
 end
 
 function love.update(dt)
@@ -82,6 +86,11 @@ function love.update(dt)
     player.yV = 0
   end
 
+  for i,v in ipairs(bullets) do
+    v.x = v.x + (v.dx * dt)
+    v.y = v.y + (v.dy * dt)
+  end
+
 
   player.xV = player.xV * 0.8
   player.yV = player.yV * 0.8
@@ -91,11 +100,11 @@ function love.update(dt)
 
   enemies_update(dt)
   shader_update(dt)
-  bullet_update(dt)
   renderShader()
 end
 
 function love.draw()
+  if menu == false then
   love.graphics.push()
   love.graphics.translate(-camera.x + w/ 2, -camera.y + h / 2)
   love.graphics.setColor(255, 255, 255)
@@ -114,10 +123,11 @@ function love.draw()
     love.graphics.rectangle("fill", player.x, player.y, player.w, player.h)
 
   -- draw bullets
-    love.graphics.setColor(128,128,128)
+    love.graphics.setColor(128, 128, 128)
     for i,v in ipairs(bullets) do
       love.graphics.circle("fill", v.x, v.y, 3)
     end
+
 
   -- draw enemies
   for i, v in ipairs(enemies) do
@@ -133,4 +143,22 @@ function love.draw()
   love.graphics.setColor(255, 0, 0)
   love.graphics.rectangle("fill", love.graphics.getWidth()/2 - (healthBar*32)/2, 0, healthBar*32, 32)
   love.graphics.setColor(255, 255, 255)
+  else
+    love.graphics.setBackgroundColor(0, 0, 0)
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.rectangle("fill", love.graphics.getWidth()/2 - 128, love.graphics.getHeight()/2 - 64 , 256, 128)
+    love.graphics.setColor(0, 0, 256)
+    love.graphics.print("Start", love.graphics.getWidth()/2 - 64, love.graphics.getHeight()/2 - 32 , 0, 4, 4)
+
+
+  end
+end
+
+function love.mousepressed(x, y, button)
+  if menu == true then
+  if x > love.graphics.getWidth()/2 - 128 and x < love.graphics.getWidth()/2 + 128
+  and y >  love.graphics.getHeight()/2 - 64 and y <  love.graphics.getHeight()/2 + 64 then
+    menu = false
+  end
+end
 end
