@@ -28,11 +28,17 @@ function renderShader()
     end
   end
   -- draw player
+  if inUse < 1 then
     drawSimpleShadow(player.x, player.y, 8, 8, 8)
-
+  end
   -- draw enemies
   for i, v in ipairs(enemies) do
     drawSimpleShadow(v.x, v.y, 8, 8, 8)
+  end
+
+  -- draw vehicles
+  for i, v in ipairs(vehicles) do
+    drawShadow(v.x, v.y, v.w, v.h, 32, v.angle)
   end
 
   love.graphics.setCanvas()
@@ -51,7 +57,6 @@ function drawSimpleShadow(x, y, w, h, s)
 end
 
 function drawShadow(x, y, w, h, s, angle)
-  angle = math.rad(angle)
   corners = {}
   corners[1] = rotate(w/2, -h/2, angle)
   corners[2] = rotate(w/2, h/2, angle)
@@ -91,18 +96,4 @@ function drawShadow(x, y, w, h, s, angle)
   for i, v in ipairs(triangles) do
     love.graphics.polygon("fill", v)
   end
-end
-
-function rotate(x, y, angle)
-  r, theta = unpack(toPolar(x, y))
-  theta = theta + angle
-  return toCartesian(r, theta)
-end
-
-function toPolar(x, y)
-  return {math.sqrt(x*x + y*y), math.atan2(y, x)}
-end
-
-function toCartesian(r, theta)
-  return {r*math.cos(theta), r*math.sin(theta)}
 end
