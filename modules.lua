@@ -1,4 +1,4 @@
-tileType = {[0] = 0, [1] = 1, [2] = 0}
+tileType = {[0] = 0, [1] = 0, [2] = 0, [3] = 1, [4] = 0}
 
 
 tilesetImage = love.graphics.newImage("tileset.png")
