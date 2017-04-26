@@ -38,7 +38,7 @@ function renderShader()
 
   -- draw vehicles
   for i, v in ipairs(vehicles) do
-    drawShadow(v.x, v.y, v.w, v.h, 32, v.angle)
+    drawShadow(v.x, v.y, v.w, v.h, 32, v.newAngle)
   end
 
   love.graphics.setCanvas()
