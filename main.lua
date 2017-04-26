@@ -1,22 +1,25 @@
 
+require("bullet")
 require("modules")
 require("enemies")
 require("collision")
 require("shader")
 function love.load()
   love.graphics.setBackgroundColor(128,128,128)
-  player = {}
-  player.x = 32
-  player.y = 0
-  player.xV = 0
-  player.yV = 0
+  player = {x = 32, y = 0, xV = 0, yV = 0, w = 8, h = 8}
+  --player.x = 32
+  --player.y = 0
+  --player.xV = 0
+  --player.yV = 0
+
   w, h = love.graphics.getDimensions()
   camera = {x = 0, y = 0}
   map = mapMaker({{1, 1},
-                  {1, 1}})
+                {1, 1}})
 
   shader_load()
   enemies_load()
+  bullet_load()
 end
 
 function love.update(dt)
@@ -85,6 +88,7 @@ function love.update(dt)
 
   enemies_update(dt)
   shader_update(dt)
+  bullet_update(dt)
   renderShader()
 end
 
@@ -93,6 +97,7 @@ function love.draw()
   love.graphics.translate(-camera.x + w/ 2, -camera.y + h / 2)
   love.graphics.setColor(255, 255, 255)
 
+
   for i, v in ipairs(map) do
     for i2 = 1, #v do
 
@@ -100,10 +105,15 @@ function love.draw()
 
     end
   end
+
   -- draw player
     love.graphics.setColor(0, 255, 255)
-    love.graphics.rectangle("fill", player.x, player.y, 8, 8)
+    love.graphics.rectangle("fill", player.x, player.y, player.w, player.h)
 
+    love.graphics.setColor(128,128,128)
+    for i,v in ipairs(bullets) do
+      love.graphics.circle("fill", v.x, v.y, 3)
+    end
 
   -- draw enemies
   for i, v in ipairs(enemies) do
@@ -122,4 +132,6 @@ function love.draw()
   love.graphics.pop()
   love.graphics.setColor(255, 255, 255, 100)
   love.graphics.draw(shaderCanvas, 0, 0)
+
+  love.graphics.print((tostring(angled)), 10, 10)
 end
