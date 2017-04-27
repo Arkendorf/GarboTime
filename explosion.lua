@@ -1,5 +1,5 @@
 function newExplosion(x, y)
-
+  screenShake(1, 3)
 
   local startX = x
   local startY = y
@@ -49,5 +49,5 @@ function explosion_load ()
   explosionImg[7] = love.graphics.newQuad(14*tileSize, 17*tileSize, tileSize, tileSize,
   tilesetImage:getWidth(), tilesetImage:getHeight())
 
-  frameSpeed = 7
+  frameSpeed = 14
 end
