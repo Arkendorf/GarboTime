@@ -6,6 +6,7 @@ require("shader")
 require("explosion")
 require("moremath")
 require("vehicle")
+require("populate")
 
 
 
@@ -38,6 +39,7 @@ function love.load()
 
   shader_load()
   enemies_load()
+  populateEnemy(15)
   explosion_load()
   bullet_load()
   vehicles_load()
@@ -107,15 +109,7 @@ function love.update(dt)
 
 
   if love.keyboard.isDown("space") and inUse > 0 then
-    newPos = rotate(0, vehicles[inUse].h/2 + player.h, vehicles[inUse].newAngle)
-    player.x = vehicles[inUse].x + newPos.x - player.w/2
-    player.y = vehicles[inUse].y + newPos.y - player.h/2
-    if collideWithMap(player.x + player.w/2, player.y + player.h/2, player.w, player.h, "player") then
-      newPos = rotate(0, -vehicles[inUse].h/2 - player.h, vehicles[inUse].newAngle)
-      player.x = vehicles[inUse].x + newPos.x - player.w/2
-      player.y = vehicles[inUse].y + newPos.y - player.h/2
-    end
-    inUse = 0
+    getOutOfVehicle()
   end
 end
 camera.x = player.x

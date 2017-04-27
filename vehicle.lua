@@ -85,17 +85,41 @@ function vehicles_update(dt)
     cartX, cartY = toCartesian(vehicles[i].speedV, vehicles[i].angle)
     vehicles[i].x = vehicles[i].x + cartX
     vehicles[i].y = vehicles[i].y + cartY
+
+    if vehicles[i].hp <= 0 then
+      for j = 1, 8 do
+        newExplosion(vehicles[i].x + math.random(-(vehicles[i].w + vehicles[i].h)/2, (vehicles[i].w + vehicles[i].h)/2),
+                   vehicles[i].y + math.random(-(vehicles[i].w + vehicles[i].h)/2, (vehicles[i].w + vehicles[i].h)/2))
+      end
+      if inUse == i then
+        getOutOfVehicle()
+      end
+      vehicles[i] = nil
+    end
   end
+  vehicles = removeNil(vehicles)
 end
 
 function newVehicle(vX, vY, type)
   if type == 1 then
-    vehicles[#vehicles + 1] = {x = vX, y = vY, w = 64, h = 32, type = 1, speed = 0, speedV = 0, angle = 0, newAngle = 0, newAngleV = 0, accel = 1, turn = 1, hp = 10}
+    vehicles[#vehicles + 1] = {x = vX, y = vY, w = 64, h = 32, type = 1, speed = 0, speedV = 0, angle = 0, newAngle = 0, newAngleV = 0.001, accel = 1, turn = 1, hp = 8}
   elseif type == 2 then
-    vehicles[#vehicles + 1] = {x = vX, y = vY, w = 80, h = 48, type = 2, speed = 0, speedV = 0, angle = 0, newAngle = 0, newAngleV = 0, accel = 0.75, turn = 0.75, hp = 15}
+    vehicles[#vehicles + 1] = {x = vX, y = vY, w = 80, h = 48, type = 2, speed = 0, speedV = 0, angle = 0, newAngle = 0, newAngleV = 0.001, accel = 0.75, turn = 0.75, hp = 12}
   elseif type == 3 then
-    vehicles[#vehicles + 1] = {x = vX, y = vY, w = 80, h = 48, type = 3, speed = 0, speedV = 0, angle = 0, newAngle = 0, newAngleV = 0, accel = 0.5, turn = 0.5, hp = 20}
+    vehicles[#vehicles + 1] = {x = vX, y = vY, w = 80, h = 48, type = 3, speed = 0, speedV = 0, angle = 0, newAngle = 0, newAngleV = 0.001, accel = 0.5, turn = 0.5, hp = 16}
   elseif type == 4 then
-    vehicles[#vehicles + 1] = {x = vX, y = vY, w = 96, h = 64, type = 4, speed = 0, speedV = 0, angle = 0, newAngle = 0, newAngleV = 0, accel = 0.25, turn = 0.25, hp = 25}
+    vehicles[#vehicles + 1] = {x = vX, y = vY, w = 96, h = 64, type = 4, speed = 0, speedV = 0, angle = 0, newAngle = 0, newAngleV = 0.001, accel = 0.25, turn = 0.25, hp = 20}
   end
+end
+
+function getOutOfVehicle()
+  newPos = rotate(0, vehicles[inUse].h/2 + player.h, vehicles[inUse].newAngle)
+  player.x = vehicles[inUse].x + newPos.x - player.w/2
+  player.y = vehicles[inUse].y + newPos.y - player.h/2
+  if collideWithMap(player.x + player.w/2, player.y + player.h/2, player.w, player.h, "player") then
+    newPos = rotate(0, -vehicles[inUse].h/2 - player.h, vehicles[inUse].newAngle)
+    player.x = vehicles[inUse].x + newPos.x - player.w/2
+    player.y = vehicles[inUse].y + newPos.y - player.h/2
+  end
+  inUse = 0
 end
