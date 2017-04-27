@@ -30,7 +30,6 @@ function updateEnemy(num, dt)
     end
   else
     if advancedCollideWithMap(enemies[num].x + enemies[num].w/2, enemies[num].y + enemies[num].h/2, enemies[num].w, enemies[num].h, 0, "enemy", num) == "dead" then
-      newExplosion(enemies[num].x, enemies[num].y)
       enemies[num] = nil
       addAmmo()
       if inUse > 0 then

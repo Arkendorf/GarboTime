@@ -135,7 +135,7 @@ function advancedCollideWithMap(x, y, w, h, a, type, num)
     end
   end
   for i, v in ipairs(vehicles) do
-    if (type ~= "vehicle" or num ~= i) and advancedCollision(x, y, w, h, a, v.x, v.y, v.w, v.h, v.angle) then
+    if (type ~= "vehicle" or num ~= i) and advancedCollision(x, y, w, h, a, v.x, v.y, v.w, v.h, v.newAngle) then
       if type == "enemy" and v.speedV > 1 or v.speedV < -1 then
         return "dead"
       end
