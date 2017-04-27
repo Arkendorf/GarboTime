@@ -1,4 +1,4 @@
-tileType = {[0] = 0, [1] = 0, [2] = 0, [3] = 0wa, [4] = 0, [5] = 1, [9] = 1, [11]= 1,[21]=1, [22]=1}
+tileType = {[0] = 0, [1] = 0, [2] = 0, [3] = 0, [4] = 0, [5] = 1, [9] = 1, [11]= 1,[21]=1, [22]=1}
 
 
 tilesetImage = love.graphics.newImage("tileset.png")
@@ -44,16 +44,16 @@ tilesetImage:getWidth(), tilesetImage:getHeight())
 tiles[11] = love.graphics.newQuad(5*tileSize, 0*tileSize, tileSize, tileSize,
 tilesetImage:getWidth(), tilesetImage:getHeight())
 
-tiles[12] = love.graphics.newQuad(8*tileSize, 2*tileSize, tileSize, tileSize,
+tiles[12] = love.graphics.newQuad(8*tileSize, 1*tileSize, tileSize, tileSize,
 tilesetImage:getWidth(), tilesetImage:getHeight())
 
-tiles[13] = love.graphics.newQuad(8*tileSize, 3*tileSize, tileSize, tileSize,
+tiles[13] = love.graphics.newQuad(8*tileSize, 2*tileSize, tileSize, tileSize,
 tilesetImage:getWidth(), tilesetImage:getHeight())
 
-tiles[14] = love.graphics.newQuad(9*tileSize, 2*tileSize, tileSize, tileSize,
+tiles[14] = love.graphics.newQuad(9*tileSize, 1*tileSize, tileSize, tileSize,
 tilesetImage:getWidth(), tilesetImage:getHeight())
 
-tiles[15] = love.graphics.newQuad(9*tileSize, 3*tileSize, tileSize, tileSize,
+tiles[15] = love.graphics.newQuad(9*tileSize, 2*tileSize, tileSize, tileSize,
 tilesetImage:getWidth(), tilesetImage:getHeight())
 
 tiles[16] = love.graphics.newQuad(3*tileSize, 1*tileSize, tileSize, tileSize,
