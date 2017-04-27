@@ -29,6 +29,7 @@ function love.load()
 end
 
 function love.update(dt)
+    vehicles_update(dt)
   if inUse < 1 then
     if love.keyboard.isDown("w") then
       player.yV = player.yV - dt * 24
@@ -96,12 +97,12 @@ function love.update(dt)
 
   if love.keyboard.isDown("space") and inUse > 0 then
     newPos = rotate(0, vehicles[inUse].h/2 + player.h, vehicles[inUse].newAngle)
-    player.x = vehicles[inUse].x + newPos[1]- player.w/2
-    player.y = vehicles[inUse].y + newPos[2]- player.h/2
+    player.x = vehicles[inUse].x + newPos.x - player.w/2
+    player.y = vehicles[inUse].y + newPos.y - player.h/2
     if collideWithMap(player.x + player.w/2, player.y + player.h/2, player.w, player.h, "player") then
       newPos = rotate(0, -vehicles[inUse].h/2 - player.h, vehicles[inUse].newAngle)
-      player.x = vehicles[inUse].x + newPos[1]- player.w/2
-      player.y = vehicles[inUse].y + newPos[2]- player.h/2
+      player.x = vehicles[inUse].x + newPos.x - player.w/2
+      player.y = vehicles[inUse].y + newPos.y - player.h/2
     end
     inUse = 0
   end
@@ -109,7 +110,6 @@ function love.update(dt)
   bullet_update(dt)
   enemies_update(dt)
   shader_update(dt)
-  vehicles_update(dt)
   renderShader()
   explosion_update(dt)
 end
@@ -127,10 +127,6 @@ function love.draw()
       love.graphics.draw(tilesetImage, tiles[map[i][i2]],(i2 - 1)*tileSize, (i - 1)*tileSize)
     end
   end
-
-  -- draw player
-    love.graphics.setColor(0, 255, 255)
-    love.graphics.rectangle("fill", player.x, player.y, player.w, player.h)
 
   -- draw enemies
   for i, v in ipairs(enemies) do
@@ -151,6 +147,10 @@ function love.draw()
       love.graphics.draw(vehicleImg[4], v.x, v.y, v.newAngle, 1, 1, v.w/2, v.h/2)
     end
   end
+
+  -- draw player
+    love.graphics.setColor(0, 255, 255)
+    love.graphics.rectangle("fill", player.x, player.y, player.w, player.h)
 
   -- draw bullets
   love.graphics.setColor(128, 128, 128)
