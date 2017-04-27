@@ -35,10 +35,6 @@ function vehicles_update(dt)
   end
 
   for i = 1, #vehicles do
-    cartX, cartY = toCartesian(vehicles[i].speedV, vehicles[i].angle)
-    vX = vehicles[i].x + cartX
-    vY = vehicles[i].y + cartY
-
     if advancedCollideWithMap(vehicles[i].x, vehicles[i].y, vehicles[i].w, vehicles[i].h, vehicles[i].newAngle + vehicles[i].newAngleV, "vehicle", i) then
       -- if vehicles[i].newAngleV < 0  then
       --   while advancedCollideWithMap(vehicles[i].x, vehicles[i].y, vehicles[i].w, vehicles[i].h, vehicles[i].newAngle - 1, "vehicle", i) do
@@ -51,6 +47,7 @@ function vehicles_update(dt)
       -- end
       vehicles[i].angle = vehicles[i].newAngle
       vehicles[i].newAngleV = 0
+      screenShake(0.1, 1)
     end
     vehicles[i].newAngle = vehicles[i].newAngle + vehicles[i].newAngleV
     vehicles[i].newAngleV = vehicles[i].newAngleV * 0.8
@@ -82,6 +79,7 @@ function vehicles_update(dt)
       --   end
       -- end
       vehicles[i].speedV = 0
+      screenShake(0.1, 1)
     end
     vehicles[i].speed = vehicles[i].speed + vehicles[i].speedV
     vehicles[i].speedV = vehicles[i].speedV * 0.95
