@@ -18,7 +18,7 @@ function love.load()
   map = mapMaker({{1, 1},
                 {1, 1}})
 
-  screenshake = {x = 0, y = 0, time = 0}
+  screenshake = {x = 0, y = 0, time = 0, range = 1}
 
   shader_load()
   enemies_load()
@@ -79,8 +79,8 @@ function love.update(dt)
   camera.y = player.y
 
   if screenshake.time > 0 then
-    screenshake.x = math.random(-1, 1)
-    screenshake.y = math.random(-1, 1)
+    screenshake.x = math.random(-screenshake.range, screenshake.range)
+    screenshake.y = math.random(-screenshake.range, screenshake.range)
     screenshake.time = screenshake.time - dt
   else
     screenshake.time = 0
@@ -194,6 +194,7 @@ function love.mousepressed(x, y, button)
   end
 end
 
-function screenShake(time)
+function screenShake(time, range)
   screenshake.time = time
+  screenshake.range = range
 end
