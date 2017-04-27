@@ -13,8 +13,7 @@ function love.load()
 
   love.graphics.setBackgroundColor(128,128,128)
 
-  player = {x=32, y=0, xV = 0, yV = 0, w = 8, h = 8, hp = 8, ammo = 20}
-  menu = true
+
 
   w, h = love.graphics.getDimensions()
   camera = {x = 0, y = 0}
@@ -22,6 +21,9 @@ function love.load()
                 {1, 1}})
 
   screenshake = {x = 0, y = 0, time = 0, range = 1}
+
+  player = {x= #map[1]*tileSize/2, y= #map*tileSize/2, xV = 0, yV = 0, w = 8, h = 8, hp = 8, ammo = 20}
+  menu = true
 
   shader_load()
   enemies_load()
@@ -31,6 +33,7 @@ function love.load()
 end
 
 function love.update(dt)
+  if menu == false then
   if inUse < 1 then
     if love.keyboard.isDown("w") then
       player.yV = player.yV - dt * 24
@@ -79,8 +82,6 @@ function love.update(dt)
   player.xV = player.xV * 0.8
   player.yV = player.yV * 0.8
 
-  camera.x = player.x
-  camera.y = player.y
 
   if screenshake.time > 0 then
     screenshake.x = math.random(-screenshake.range, screenshake.range)
@@ -108,16 +109,20 @@ function love.update(dt)
     inUse = 0
   end
 
-  bullet_update(dt)
-  enemies_update(dt)
-  shader_update(dt)
-  vehicles_update(dt)
-  renderShader()
-  explosion_update(dt)
+
+end
+bullet_update(dt)
+enemies_update(dt)
+shader_update(dt)
+vehicles_update(dt)
+renderShader()
+explosion_update(dt)
+
+camera.x = player.x
+camera.y = player.y
 end
 
 function love.draw()
-  if menu == false then
   love.graphics.push()
   love.graphics.translate(-camera.x + w / 2 + screenshake.x, -camera.y + h / 2 + screenshake.y)
   love.graphics.setColor(255, 255, 255)
@@ -170,9 +175,10 @@ function love.draw()
   love.graphics.pop()
   love.graphics.setColor(255, 255, 255, 100)
   love.graphics.draw(shaderCanvas, 0, 0)
-
-  love.graphics.setColor(255, 0, 0)
-  love.graphics.rectangle("fill", love.graphics.getWidth()/2 - (player.hp*32)/2, 0, player.hp*32, 32)
+  if menu == false then
+    love.graphics.setColor(255, 0, 0)
+    love.graphics.rectangle("fill", love.graphics.getWidth()/2 - (player.hp*32)/2, 0, player.hp*32, 32)
+  end
   if inUse > 0 then
       love.graphics.setColor(200, 200, 200)
     love.graphics.rectangle("fill", love.graphics.getWidth()/2 - (vehicles[inUse].hp*16)/2, 32, vehicles[inUse].hp*16, 16)
@@ -180,18 +186,22 @@ function love.draw()
   love.graphics.setColor(255, 255, 255)
 
   love.graphics.print(tostring(advancedCollideWithMap(vehicles[1].x, vehicles[1].y, vehicles[1].w, vehicles[1].h, vehicles[1].angle, "vehicle", 1)))
-  else
+
+  font = love.graphics.newFont("font.ttf", 50)
+  love.graphics.setFont(font)
+
+  if menu == true then
     love.graphics.setBackgroundColor(0, 0, 0)
-    love.graphics.setColor(255, 255, 255)
-    love.graphics.rectangle("fill", love.graphics.getWidth()/2 - 128, love.graphics.getHeight()/2 - 64 , 256, 128)
-    love.graphics.setColor(0, 0, 256)
-    love.graphics.print("Start", love.graphics.getWidth()/2 - 64, love.graphics.getHeight()/2 - 32 , 0, 4, 4)
+    love.graphics.setColor(32, 32, 32, 150)
+    love.graphics.rectangle("fill", 0, love.graphics.getHeight()/2 - 46 , 256, 64)
+    love.graphics.setColor(255,255,255)
+    love.graphics.print("start", 32, love.graphics.getHeight()/2 - 32)
   end
 end
 
 function love.mousepressed(x, y, button)
   if menu == true then
-    if x > love.graphics.getWidth()/2 - 128 and x < love.graphics.getWidth()/2 + 128
+    if x > 0 and x < love.graphics.getWidth()/2 + 128
     and y >  love.graphics.getHeight()/2 - 64 and y <  love.graphics.getHeight()/2 + 64 then
       menu = false
     end

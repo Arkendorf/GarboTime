@@ -7,7 +7,7 @@ function vehicles_load()
   vehicleImg[3] = love.graphics.newImage("armoredcar.png")
   vehicleImg[4] = love.graphics.newImage("tank.png")
   vehicles = {}
-  inUse = 1
+  inUse = 0
   newVehicle(20 * 32, 32, 1)
   newVehicle(400, 32, 4)
 end
