@@ -12,8 +12,7 @@ function love.load()
   bulletSpeed = 250
 
 	bullets = {}
-	player = {x=32, y=0, xV = 0, yV = 0, w = 8, h = 8}
-  --player = {x = 32, y = 0, xV = 0, yV = 0, w = 8, h = 8}
+	player = {x = 32, y = 0, xV = 0, yV = 0, w = 8, h = 8}
   --player.x = 32
   --player.y = 0
   --player.xV = 0
@@ -27,9 +26,13 @@ function love.load()
 
   shader_load()
   enemies_load()
+  explosion_load()
 end
 
 function love.update(dt)
+  if menu == false then
+
+
   if love.keyboard.isDown("w") then
     player.yV = player.yV - 1
   end
@@ -92,6 +95,7 @@ function love.update(dt)
   end
 
 
+
   player.xV = player.xV * 0.8
   player.yV = player.yV * 0.8
 
@@ -101,6 +105,8 @@ function love.update(dt)
   enemies_update(dt)
   shader_update(dt)
   renderShader()
+  explosion_update(dt)
+end
 end
 
 function love.draw()
@@ -108,6 +114,7 @@ function love.draw()
   love.graphics.push()
   love.graphics.translate(-camera.x + w/ 2, -camera.y + h / 2)
   love.graphics.setColor(255, 255, 255)
+
 
 
   for i, v in ipairs(map) do
@@ -128,6 +135,10 @@ function love.draw()
       love.graphics.circle("fill", v.x, v.y, 3)
     end
 
+  -- draw explosions
+    for i,v in ipairs(explosion) do
+      love.graphics.draw(tilesetImage,explosionImg[v.frame], v.x-16, v.y-16)
+    end
 
   -- draw enemies
   for i, v in ipairs(enemies) do

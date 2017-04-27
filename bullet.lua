@@ -2,8 +2,8 @@
 function love.mousepressed(x, y, button)
 
 	if button == 1 then
-		startX = player.x + player.w / 2
-		startY = player.y + player.h / 2
+		local startX = player.x + player.w / 2
+		local startY = player.y + player.h / 2
 		mouseX = x
 		mouseY = y
 
