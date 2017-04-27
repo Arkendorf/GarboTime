@@ -199,6 +199,8 @@ function love.draw()
     love.graphics.rectangle("fill", love.graphics.getWidth()/2 - (player.hp*32)/2, 0, player.hp*32, 32)
     if player.hp <= 0 then
       menu = true
+      player.hp = 8
+      love.load()
     end
   end
   if inUse > 0 then
