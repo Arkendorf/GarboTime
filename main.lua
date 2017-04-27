@@ -33,11 +33,8 @@ function love.load()
 end
 
 function love.update(dt)
-<<<<<<< HEAD
-    vehicles_update(dt)
-=======
+  vehicles_update(dt)
   if menu == false then
->>>>>>> origin/master
   if inUse < 1 then
     if love.keyboard.isDown("w") then
       player.yV = player.yV - dt * 24
@@ -112,26 +109,15 @@ function love.update(dt)
     end
     inUse = 0
   end
-
-<<<<<<< HEAD
-  bullet_update(dt)
-  enemies_update(dt)
-  shader_update(dt)
-  renderShader()
-  explosion_update(dt)
-=======
-
 end
+camera.x = player.x
+camera.y = player.y
+
 bullet_update(dt)
 enemies_update(dt)
 shader_update(dt)
-vehicles_update(dt)
 renderShader()
 explosion_update(dt)
-
-camera.x = player.x
-camera.y = player.y
->>>>>>> origin/master
 end
 
 function love.draw()
