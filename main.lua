@@ -10,7 +10,7 @@ require("vehicle")
 function love.load()
 
   love.graphics.setBackgroundColor(128,128,128)
-	
+
   player = {x=32, y=0, xV = 0, yV = 0, w = 8, h = 8, hp = 8, ammo = 20}
   menu = true
 
@@ -112,7 +112,6 @@ function love.update(dt)
   vehicles_update(dt)
   renderShader()
   explosion_update(dt)
-end
 end
 
 function love.draw()
