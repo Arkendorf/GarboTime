@@ -17,8 +17,8 @@ function love.load()
 
   w, h = love.graphics.getDimensions()
   camera = {x = 0, y = 0}
-  map = mapMaker({{1, 1},
-                {1, 1}})
+  map = mapMaker({{1, 2, 3, 4, 5},
+                {1, 2, 3, 4, 5}})
 
   screenshake = {x = 0, y = 0, time = 0, range = 1}
 
