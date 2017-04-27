@@ -20,6 +20,17 @@ function love.load()
   map = mapMaker({{1, 2, 3, 4, 5},
                 {1, 2, 3, 4, 5}})
 
+  mapCanvas = love.graphics.newCanvas(#map[1]*tileSize, #map*tileSize)
+  love.graphics.setCanvas(mapCanvas)
+  love.graphics.clear()
+  for i, v in ipairs(map) do
+    for i2 = 1, #v do
+      love.graphics.draw(tilesetImage, tiles[map[i][i2]],(i2 - 1)*tileSize, (i - 1)*tileSize)
+    end
+  end
+  love.graphics.setCanvas()
+
+
   screenshake = {x = 0, y = 0, time = 0, range = 1}
 
   player = {x= #map[1]*tileSize/2, y= #map*tileSize/2, xV = 0, yV = 0, w = 8, h = 8, hp = 8, ammo = 20}
@@ -48,6 +59,7 @@ function love.update(dt)
     if love.keyboard.isDown("d") then
       player.xV = player.xV + dt * 24
     end
+
     if advancedCollideWithMap(player.x + player.xV + player.w/2, player.y + player.h/2, player.w, player.h, 0, "player") then
       if player.xV > 0 then
         while advancedCollideWithMap(player.x + 1 + player.w/2, player.y + player.h/2, player.w, player.h, 0, "player") == false do
@@ -139,12 +151,9 @@ function love.draw()
   love.graphics.setColor(255, 255, 255)
 
 
+  --Draw tiles
+  love.graphics.draw(mapCanvas, 0, 0)
 
-  for i, v in ipairs(map) do
-    for i2 = 1, #v do
-      love.graphics.draw(tilesetImage, tiles[map[i][i2]],(i2 - 1)*tileSize, (i - 1)*tileSize)
-    end
-  end
 
   -- draw enemies
   for i, v in ipairs(enemies) do
@@ -201,7 +210,7 @@ function love.draw()
   end
   love.graphics.setColor(255, 255, 255)
 
-  love.graphics.print(tostring(carHighlighted))
+  love.graphics.print(tostring(love.timer.getFPS()))
 
   font = love.graphics.newFont("font.ttf", 50)
   love.graphics.setFont(font)
