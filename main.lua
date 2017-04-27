@@ -203,6 +203,9 @@ function love.draw()
   if menu == false then
     love.graphics.setColor(255, 0, 0)
     love.graphics.rectangle("fill", love.graphics.getWidth()/2 - (player.hp*32)/2, 0, player.hp*32, 32)
+    if player.hp <= 0 then
+      menu = true
+    end
   end
   if inUse > 0 then
       love.graphics.setColor(200, 200, 200)
