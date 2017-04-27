@@ -39,7 +39,6 @@ function love.load()
 
   shader_load()
   enemies_load()
-  populateEnemy(15)
   explosion_load()
   bullet_load()
   vehicles_load()
@@ -105,6 +104,7 @@ function love.update(dt)
   else
     screenshake.time = 0
   end
+  
 
 
 

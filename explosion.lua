@@ -8,8 +8,13 @@ function newExplosion(x, y)
   table.insert(explosion, {x = startX, y = startY, frame = 1, time = 0})
 
   --if startX <= player.x + 32 or startX >= player.x - 32 or startY <= player.y + 32 or startY >= player.y - 32 then
-  if math.sqrt((player.x-startX)*(player.x-startX)+(player.y-startY)*(player.y-startY)) <= 40 then
+  if inUse < 1 and math.sqrt((player.x-startX)*(player.x-startX)+(player.y-startY)*(player.y-startY)) <= 40 then
     player.hp = player.hp - 4
+  end
+  for i,v in ipairs(vehicles) do
+    if math.sqrt((v.x-startX)*(v.x-startX)+(v.y-startY)*(v.y-startY)) <= 40 then
+      v.hp = v.hp - 4
+    end
   end
 end
 

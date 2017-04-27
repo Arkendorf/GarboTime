@@ -4,6 +4,9 @@ function enemies_load()
   walkable = 0
   setWalkable(walkable)
   enemies = {}
+
+  newEnemy (0,0)
+  
 end
 
 function newEnemy(eX, eY)
