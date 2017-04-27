@@ -15,13 +15,26 @@ function advancedCollision(x1, y1, w1, h1, a1, x2, y2, w2, h2, a2)
 	object1Corners[2] = rotate(w1/2, h1/2, a1)
 	object1Corners[3] = rotate(-w1/2, h1/2, a1)
 	object1Corners[4] = rotate(-w1/2, -h1/2, a1)
+  for i = 1, 4 do
+    object1Corners[i].x = object1Corners[i].x + x1
+    object1Corners[i].y = object1Corners[i].y + y1
+  end
 
 	object2Corners = {}
 	object2Corners[1] = rotate(w2/2, -h2/2, a2)
 	object2Corners[2] = rotate(w2/2, h2/2, a2)
 	object2Corners[3] = rotate(-w2/2, h2/2, a2)
 	object2Corners[4] = rotate(-w2/2, -h2/2, a2)
+  for i = 1, 4 do
+    object2Corners[i].x = object2Corners[i].x + x2
+    object2Corners[i].y = object2Corners[i].y + y2
+  end
 
+  for i = 1, 4 do
+    if PointWithinShape(object1Corners, object2Corners[i].x, object2Corners[i].y) then
+      return true
+    end
+  end
 	for i = 1, 4 do
 		if i+1 > 4 then
 			i2 = 1
@@ -34,10 +47,10 @@ function advancedCollision(x1, y1, w1, h1, a1, x2, y2, w2, h2, a2)
 			else
 				j2 = j+1
 			end
-			if checkIntersect({x1 + object1Corners[i][1],  y1 + object1Corners[i][2]},
-                        {x1 + object1Corners[i2][1], y1 + object1Corners[i2][2]},
-                        {x2 + object2Corners[j][1],  y2 + object2Corners[j][2]},
-                        {x2 + object2Corners[j2][1], y2 + object2Corners[j2][2]}) then
+			if checkIntersect({object1Corners[i].x,  object1Corners[i].y},
+                        {object1Corners[i2].x, object1Corners[i2].y},
+                        {object2Corners[j].x,  object2Corners[j].y},
+                        {object2Corners[j2].x, object2Corners[j2].y}) then
 				return true
 			end
 		end
@@ -129,7 +142,7 @@ function advancedCollideWithMap(x, y, w, h, a, type, num)
       return true
     end
   end
-  if type ~= "player" and advancedCollision(x, y, w, h, a, player.x + player.w/2, player.y + player.h/2, player.w, player.h, 0) then
+  if type ~= "player" and type ~= "vehicle" and advancedCollision(x, y, w, h, a, player.x + player.w/2, player.y + player.h/2, player.w, player.h, 0) then
     return true
   end
   if x < 0 then
