@@ -10,7 +10,8 @@ require("vehicle")
 function love.load()
 
   love.graphics.setBackgroundColor(128,128,128)
-	player = {x=32, y=0, xV = 0, yV = 0, w = 8, h = 8, hp = 8, ammo = 20}
+	
+  player = {x=32, y=0, xV = 0, yV = 0, w = 8, h = 8, hp = 8, ammo = 20}
   menu = true
 
   w, h = love.graphics.getDimensions()
@@ -22,6 +23,7 @@ function love.load()
 
   shader_load()
   enemies_load()
+  explosion_load()
   bullet_load()
   vehicles_load()
 end
@@ -109,6 +111,8 @@ function love.update(dt)
   shader_update(dt)
   vehicles_update(dt)
   renderShader()
+  explosion_update(dt)
+end
 end
 
 function love.draw()
@@ -116,6 +120,7 @@ function love.draw()
   love.graphics.push()
   love.graphics.translate(-camera.x + w / 2 + screenshake.x, -camera.y + h / 2 + screenshake.y)
   love.graphics.setColor(255, 255, 255)
+
 
 
   for i, v in ipairs(map) do
@@ -152,6 +157,11 @@ function love.draw()
   love.graphics.setColor(128, 128, 128)
   for i,v in ipairs(bullets) do
     love.graphics.circle("fill", v.x, v.y, 3)
+  end
+
+  -- draw explosions
+  for i,v in ipairs(explosion) do
+    love.graphics.draw(tilesetImage,explosionImg[v.frame], v.x-16, v.y-16)
   end
 
   love.graphics.setColor(255, 255, 255)

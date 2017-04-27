@@ -1,6 +1,5 @@
 function bullet_load()
 	bulletSpeed = 250
-
 	bullets = {}
 end
 
