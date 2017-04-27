@@ -34,7 +34,7 @@ function love.load()
 
   screenshake = {x = 0, y = 0, time = 0, range = 1}
 
-  player = {x= #map[1]*tileSize/2, y= #map*tileSize/2, xV = 0, yV = 0, w = 8, h = 8, hp = 8, ammo = 20}
+  player = {x= #map[1]*tileSize/2+(9*tileSize), y= #map*tileSize/2-(4*tileSize), xV = 0, yV = 0, w = 8, h = 8, hp = 8, ammo = 20}
   menu = true
 
   shader_load()
@@ -104,7 +104,7 @@ function love.update(dt)
   else
     screenshake.time = 0
   end
-  
+
 
 
 
