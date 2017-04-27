@@ -6,6 +6,7 @@ require("shader")
 require("explosion")
 require("moremath")
 require("vehicle")
+require("populate")
 
 
 
@@ -38,6 +39,7 @@ function love.load()
 
   shader_load()
   enemies_load()
+  populateEnemy(15)
   explosion_load()
   bullet_load()
   vehicles_load()

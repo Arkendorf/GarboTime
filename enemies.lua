@@ -4,10 +4,6 @@ function enemies_load()
   walkable = 0
   setWalkable(walkable)
   enemies = {}
-  newEnemy(64, 64)
-  newEnemy(64, 96)
-  newEnemy(96, 64)
-  newEnemy(64, 128)
 end
 
 function newEnemy(eX, eY)
@@ -30,6 +26,7 @@ function updateEnemy(num, dt)
     end
   else
     if advancedCollideWithMap(enemies[num].x + enemies[num].w/2, enemies[num].y + enemies[num].h/2, enemies[num].w, enemies[num].h, 0, "enemy", num) == "dead" then
+      screenShake(0.5, 1)
       enemies[num] = nil
       addAmmo()
       if inUse > 0 then
