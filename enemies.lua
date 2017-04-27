@@ -40,7 +40,7 @@ function updateEnemy(num, dt)
       local dist = math.sqrt((player.x-enemies[num].x)*(player.x-enemies[num].x) + (player.y-enemies[num].y)*(player.y-enemies[num].y))
       if dist < 9 then
         enemies[num].timer = enemies[num].timer - dt
-      elseif dist < 128 and inUse < 1 then
+      elseif dist < 128 then
         oldPos = {x = enemies[num].x, y = enemies[num].y}
         if (player.x-enemies[num].x) > 0 then
           enemies[num].xV = enemies[num].xV + 0.5
@@ -93,7 +93,7 @@ function updateEnemy(num, dt)
     if collision(v.x, v.y, 2, 2, enemies[num].x, enemies[num].y, enemies[num].w, enemies[num].h) then
       newExplosion(enemies[num].x, enemies[num].y)
       addAmmo()
-      enemies[num] = nil
+      table.remove(enemies, num)
       table.remove(bullets, i)
       break
     end

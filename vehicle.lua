@@ -7,7 +7,7 @@ function vehicles_load()
   vehicleImg[3] = love.graphics.newImage("armoredcar.png")
   vehicleImg[4] = love.graphics.newImage("tank.png")
   vehicles = {}
-  inUse = 1
+  inUse = 0
   newVehicle(20 * 32, 32, 1)
   newVehicle(400, 32, 4)
 end
@@ -28,10 +28,10 @@ function vehicles_update(dt)
     if love.keyboard.isDown("d") then
       vehicles[inUse].newAngleV = vehicles[inUse].newAngleV + dt * vehicles[inUse].turn
     end
-    if vehicles[inUse].type > 2 and love.mouse.isDown(1) then
-      mX, mY = love.mouse.getPosition()
-      newBullet(mX + math.random(1, 10), mY + math.random(1, 10))
-    end
+    -- if vehicles[inUse].type > 2 and love.mouse.isDown(1) then
+    --   mX, mY = love.mouse.getPosition()
+    --   newBullet(mX + math.random(1, 10), mY + math.random(1, 10))
+    -- end
   end
 
   for i = 1, #vehicles do
@@ -47,23 +47,22 @@ function vehicles_update(dt)
       -- end
       vehicles[i].angle = vehicles[i].newAngle
       vehicles[i].newAngleV = 0
-      screenShake(0.1, 1)
     end
     vehicles[i].newAngle = vehicles[i].newAngle + vehicles[i].newAngleV
     vehicles[i].newAngleV = vehicles[i].newAngleV * 0.8
-
-
+  --
+  --
     cartX, cartY = toCartesian(vehicles[i].speedV, vehicles[i].angle)
     vX = vehicles[i].x + cartX
     vY = vehicles[i].y + cartY
     if advancedCollideWithMap(vX, vY, vehicles[i].w, vehicles[i].h, vehicles[i].angle, "vehicle", i) then
       -- if vehicles[i].speedV > 0 then
-      --   cartX, cartY = toCartesian(-1, vehicles[i].angle)
+      --   cartX, cartY = toCartesian(1, vehicles[i].angle)
       --   vX = vehicles[i].x + cartX
       --   vY = vehicles[i].y + cartY
       --   while advancedCollideWithMap(vX, vY, vehicles[i].w, vehicles[i].h, vehicles[i].angle, "vehicle", i) do
-      --     vehicles[i].speed = vehicles[i].speed - 1
-      --     cartX, cartY = toCartesian(-1, vehicles[i].angle)
+      --     vehicles[i].speed = vehicles[i].speed + 1
+      --     cartX, cartY = toCartesian(1, vehicles[i].angle)
       --     vX = vehicles[i].x + cartX
       --     vY = vehicles[i].y + cartY
       --   end
@@ -79,7 +78,6 @@ function vehicles_update(dt)
       --   end
       -- end
       vehicles[i].speedV = 0
-      screenShake(0.1, 1)
     end
     vehicles[i].speed = vehicles[i].speed + vehicles[i].speedV
     vehicles[i].speedV = vehicles[i].speedV * 0.95
@@ -92,12 +90,12 @@ end
 
 function newVehicle(vX, vY, type)
   if type == 1 then
-    vehicles[#vehicles + 1] = {x = vX, y = vY, w = 96, h = 48, type = 1, speed = 0, speedV = 0, angle = 0, newAngle = 0, newAngleV = 0, accel = 2, turn = 1, hp = 10}
+    vehicles[#vehicles + 1] = {x = vX, y = vY, w = 64, h = 32, type = 1, speed = 0, speedV = 0, angle = 0, newAngle = 0, newAngleV = 0, accel = 1, turn = 1, hp = 10}
   elseif type == 2 then
-    vehicles[#vehicles + 1] = {x = vX, y = vY, w = 96, h = 64, type = 2, speed = 0, speedV = 0, angle = 0, newAngle = 0, newAngleV = 0, accel = 1.5, turn = 0.75, hp = 15}
+    vehicles[#vehicles + 1] = {x = vX, y = vY, w = 80, h = 48, type = 2, speed = 0, speedV = 0, angle = 0, newAngle = 0, newAngleV = 0, accel = 0.75, turn = 0.75, hp = 15}
   elseif type == 3 then
-    vehicles[#vehicles + 1] = {x = vX, y = vY, w = 96, h = 64, type = 3, speed = 0, speedV = 0, angle = 0, newAngle = 0, newAngleV = 0, accel = 1, turn = 0.5, hp = 20}
+    vehicles[#vehicles + 1] = {x = vX, y = vY, w = 80, h = 48, type = 3, speed = 0, speedV = 0, angle = 0, newAngle = 0, newAngleV = 0, accel = 0.5, turn = 0.5, hp = 20}
   elseif type == 4 then
-    vehicles[#vehicles + 1] = {x = vX, y = vY, w = 128, h = 96, type = 4, speed = 0, speedV = 0, angle = 0, newAngle = 0, newAngleV = 0, accel = 0.5, turn = 0.25, hp = 25}
+    vehicles[#vehicles + 1] = {x = vX, y = vY, w = 96, h = 64, type = 4, speed = 0, speedV = 0, angle = 0, newAngle = 0, newAngleV = 0, accel = 0.25, turn = 0.25, hp = 25}
   end
 end
