@@ -7,9 +7,10 @@ function newExplosion(x, y)
 
   table.insert(explosion, {x = startX, y = startY, frame = 1, time = 0})
 
-
-
-
+  --if startX <= player.x + 32 or startX >= player.x - 32 or startY <= player.y + 32 or startY >= player.y - 32 then
+  if math.sqrt((player.x-startX)*(player.x-startX)+(player.y-startY)*(player.y-startY)) <= 40 then
+    player.hp = player.hp - 4
+  end
 end
 
 function explosion_update (dt)
